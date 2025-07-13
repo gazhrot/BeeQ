@@ -77,6 +77,24 @@ Kubernetes resources are managed via Terraform.
     terraform apply
     ```
 
+### Important: Connecting Docker to Minikube
+
+To build Docker images directly into Minikube's environment and avoid `ImagePullBackOff` errors, your Docker CLI must be connected to the Minikube Docker daemon.
+
+#### On Windows (PowerShell)
+
+You must run the following command **once per new PowerShell session** where you intend to build images. This connection is not permanent and is lost when you close the terminal.
+
+```powershell
+minikube -p minikube docker-env | Invoke-Expression
+```
+
+#### On macOS / Linux (Bash/Zsh)
+
+```bash
+eval $(minikube -p minikube docker-env)
+```
+
 ## ⚡ Fast Development Workflow (for Code Changes)
 
 When you only change the application code (e.g., in `.ts` files), you don't need to run `terraform apply`. Use this much faster workflow to see your changes in seconds.
