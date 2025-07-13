@@ -77,6 +77,25 @@ Kubernetes resources are managed via Terraform.
     terraform apply
     ```
 
+## ⚡ Fast Development Workflow (for Code Changes)
+
+When you only change the application code (e.g., in `.ts` files), you don't need to run `terraform apply`. Use this much faster workflow to see your changes in seconds.
+
+1.  **Modify your application code** in the `src/` directory.
+
+2.  **Re-build the Docker image.** Make sure you are in the correct terminal session where you have already pointed your Docker CLI to Minikube (using `eval $(minikube ...)` or `Invoke-Expression`).
+
+    ```bash
+    # Use the exact same image name and tag
+    docker build -t gazhrot/beeq:latest .
+    ```
+
+3.  **Trigger a rolling restart of the deployment.** This tells Kubernetes to gracefully replace the old pods with new ones using your updated image.
+
+    ```bash
+    kubectl rollout restart deployment beeq-app -n beeq
+    ```
+
 ## 📄 API Documentation
 
 The OpenAPI documentation is automatically generated and available at the API root, on the `/api` endpoint.
