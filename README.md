@@ -77,6 +77,43 @@ Kubernetes resources are managed via Terraform.
     terraform apply
     ```
 
+### Important: Connecting Docker to Minikube
+
+To build Docker images directly into Minikube's environment and avoid `ImagePullBackOff` errors, your Docker CLI must be connected to the Minikube Docker daemon.
+
+#### On Windows (PowerShell)
+
+You must run the following command **once per new PowerShell session** where you intend to build images. This connection is not permanent and is lost when you close the terminal.
+
+```powershell
+minikube -p minikube docker-env | Invoke-Expression
+```
+
+#### On macOS / Linux (Bash/Zsh)
+
+```bash
+eval $(minikube -p minikube docker-env)
+```
+
+## ⚡ Fast Development Workflow (for Code Changes)
+
+When you only change the application code (e.g., in `.ts` files), you don't need to run `terraform apply`. Use this much faster workflow to see your changes in seconds.
+
+1.  **Modify your application code** in the `src/` directory.
+
+2.  **Re-build the Docker image.** Make sure you are in the correct terminal session where you have already pointed your Docker CLI to Minikube (using `eval $(minikube ...)` or `Invoke-Expression`).
+
+    ```bash
+    # Use the exact same image name and tag
+    docker build -t gazhrot/beeq:latest .
+    ```
+
+3.  **Trigger a rolling restart of the deployment.** This tells Kubernetes to gracefully replace the old pods with new ones using your updated image.
+
+    ```bash
+    kubectl rollout restart deployment beeq-app -n beeq
+    ```
+
 ## 📄 API Documentation
 
 The OpenAPI documentation is automatically generated and available at the API root, on the `/api` endpoint.
