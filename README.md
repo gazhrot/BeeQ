@@ -33,7 +33,7 @@ BeeQ is a "backend-as-a-service" platform that allows developers to submit long-
 1.  **Clone the repository:**
 
     ```bash
-    git clone [https://github.com/your-username/beeq.git](https://github.com/your-username/beeq.git)
+    git clone [https://github.com/gazhrot/beeq.git](https://github.com/gazhrot/beeq.git)
     cd beeq
     ```
 
