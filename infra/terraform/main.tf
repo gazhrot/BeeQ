@@ -175,6 +175,9 @@ resource "kubernetes_service" "beeq_service" {
   metadata {
     name      = "beeq-service"
     namespace = kubernetes_namespace.beeq_ns.metadata[0].name
+    labels = {
+      app = "beeq"
+    }
     annotations = {
       # Annotations so Prometheus can discover and scrape this service
       "prometheus.io/scrape" = "true"
@@ -192,10 +195,67 @@ resource "kubernetes_service" "beeq_service" {
       protocol    = "TCP"
       port        = 80
       target_port = 3000
+      name        = "http"
     }
     
     # NodePort is simple for local access with Minikube
     # For real cloud environment we should use LoadBalancer instead
     type = "NodePort"
+  }
+}
+
+# Deploy monitoring stack (Prometheus, Grafana, etc.)
+resource "helm_release" "prometheus_stack" {
+  name       = "prometheus-stack"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "kube-prometheus-stack"
+  namespace  = kubernetes_namespace.beeq_ns.metadata[0].name
+
+  set {
+    name  = "alertmanager.enabled"
+    value = "false"
+  }
+  set {
+    name  = "prometheusOperator.enabled"
+    value = "true"
+  }
+  set {
+    name  = "grafana.enabled"
+    value = "true"
+  }
+}
+
+resource "kubernetes_manifest" "beeq_servicemonitor" {
+  manifest = {
+    "apiVersion" = "monitoring.coreos.com/v1"
+    "kind"       = "ServiceMonitor"
+    "metadata" = {
+      "name"      = "beeq-servicemonitor"
+      "namespace" = kubernetes_namespace.beeq_ns.metadata[0].name
+      # This label is crucial: it tells the Prometheus deployed by the chart
+      # to take this ServiceMonitor into account.
+      "labels" = {
+        "release" = "prometheus-stack"
+      }
+    }
+    "spec" = {
+      # Target service with label app=beeq
+      "selector" = {
+        "matchLabels" = {
+          "app" = "beeq"
+        }
+      }
+      # Describes how to collect metrics
+      "endpoints" = [
+        {
+          # on the port we named 'http'
+          "port"     = "http"
+          # on route /metrics
+          "path"     = "/metrics"
+          # every 15 seconds
+          "interval" = "15s"
+        },
+      ]
+    }
   }
 }
