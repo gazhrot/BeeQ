@@ -95,6 +95,23 @@ minikube -p minikube docker-env | Invoke-Expression
 eval $(minikube -p minikube docker-env)
 ```
 
+### Accessing the Deployed Application
+
+Once your application is deployed on Minikube, you cannot access it directly via `localhost:3000`. You need to ask Minikube to create a network tunnel to the service.
+
+Run the following command in a terminal:
+
+```bash
+minikube service beeq-service -n beeq
+```
+
+This command will do two things:
+
+1.  It will print the URL to access your service in the terminal.
+2.  It will automatically open this URL in your default web browser.
+
+The URL will have a dynamic port assigned by Minikube (e.g., `http://127.0.0.1:58885`). You must use this specific URL to interact with the API running inside Kubernetes.
+
 ## ⚡ Fast Development Workflow (for Code Changes)
 
 When you only change the application code (e.g., in `.ts` files), you don't need to run `terraform apply`. Use this much faster workflow to see your changes in seconds.
