@@ -152,7 +152,6 @@ resource "kubernetes_deployment" "beeq_app" {
           }
         }
 
-        /*
         container {
           name  = "worker"
           image = var.app_image
@@ -165,7 +164,7 @@ resource "kubernetes_deployment" "beeq_app" {
               name = kubernetes_config_map.beeq_config.metadata[0].name
             }
           }
-        } */
+        }
       }
     }
   }
