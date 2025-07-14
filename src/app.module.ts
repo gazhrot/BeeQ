@@ -12,9 +12,11 @@ import { JobsModule } from './api/jobs/jobs.module';
 import { MessagingModule } from './core/messaging/messaging.module';
 import { WorkersModule } from './workers/workers.module';
 import { ApiKeyThrottlerGuard } from './core/guards/api-key-throttler.guard';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
+    PrometheusModule.register(),
     ConfigModule.forRoot({ isGlobal: true }),
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
