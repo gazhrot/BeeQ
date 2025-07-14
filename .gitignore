@@ -56,3 +56,18 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /generated/prisma
+
+# Terraform State Files
+# Contain the state of your infrastructure and potentially secrets
+*.tfstate
+*.tfstate.*
+
+# Terraform Providers Folder
+# This is the equivalent of "node_modules", downloaded by `terraform init`
+.terraform/
+
+# Terraform plan files (best practice)
+*.tfplan
+
+# Terraform Crash Logs
+crash.log
