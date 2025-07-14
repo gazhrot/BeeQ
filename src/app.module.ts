@@ -22,12 +22,11 @@ import { ApiKeyThrottlerGuard } from './core/guards/api-key-throttler.guard';
       useFactory: (config: ConfigService) => ({
         throttlers: [
           {
-            limit: 10, // 10 requêtes max
-            ttl: seconds(60), // par 60 secondes
+            limit: 10, // 10 request max
+            ttl: seconds(60), // per 60 seconds
           },
         ],
-        // On configure le stockage en lui passant l'URL de connexion à Redis
-        // construite à partir de vos variables d'environnement.
+        // We configure redis storage with environment variables
         storage: new ThrottlerStorageRedisService(
           `redis://${config.get('REDIS_HOST')}:${config.get('REDIS_PORT')}`,
         ),
