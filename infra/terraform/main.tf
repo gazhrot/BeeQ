@@ -82,7 +82,7 @@ resource "kubernetes_config_map" "beeq_config" {
   data = {
     # The database URL uses Kubernetes internal DNS service.
     # Format: postgresql://<user>:<password>@<service-name>.<namespace>.svc.cluster.local:<port>/<db>
-    DATABASE_URL = "postgresql://user:password@postgres-postgresql.${kubernetes_namespace.beeq_ns.metadata[0].name}.svc.cluster.local:5432/beeq"
+    DATABASE_URL = "postgresql://postgres:password@postgres-postgresql.${kubernetes_namespace.beeq_ns.metadata[0].name}.svc.cluster.local:5432/beeq"
     RABBITMQ_URI = "amqp://user:password@rabbitmq.${kubernetes_namespace.beeq_ns.metadata[0].name}.svc.cluster.local:5672"
     REDIS_HOST   = "redis-master.${kubernetes_namespace.beeq_ns.metadata[0].name}.svc.cluster.local"
     REDIS_PORT   = "6379"
