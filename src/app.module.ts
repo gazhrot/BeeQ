@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrismaService } from './core/prisma.service';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { createClient } from 'redis';
+import { AuthModule } from './api/auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { createClient } from 'redis';
         };
       },
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
