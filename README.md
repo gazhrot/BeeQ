@@ -131,6 +131,66 @@ When you only change the application code (e.g., in `.ts` files), you don't need
     kubectl rollout restart deployment beeq-app -n beeq
     ```
 
+### Accessing Services with Port-Forwarding
+
+Use these commands to access services running in your Kubernetes cluster from your local machine. **Each command needs to be run in its own separate terminal.**
+
+#### Application Services
+
+**1. PostgreSQL Database:**
+
+```bash
+kubectl port-forward svc/postgres-postgresql 5433:5432 -n beeq
+```
+
+_(Connects to `localhost:5433`)_
+
+**2. Redis:**
+
+```bash
+kubectl port-forward svc/redis-master 6379:6379 -n beeq
+```
+
+_(Connects to `localhost:6379`)_
+
+**3. RabbitMQ (for local app):**
+
+```bash
+kubectl port-forward svc/rabbitmq 5672:5672 -n beeq
+```
+
+_(Connects to `localhost:5672`)_
+
+---
+
+#### Monitoring & Management UIs
+
+**4. RabbitMQ Management UI:**
+
+```bash
+kubectl port-forward svc/rabbitmq 15672:15672 -n beeq
+```
+
+- **URL:** `http://localhost:15672`
+- **Login:** `user` / `password`
+
+**5. Grafana Dashboard:**
+
+```bash
+kubectl port-forward svc/prometheus-stack-grafana 3001:80 -n beeq
+```
+
+- **URL:** `http://localhost:3001`
+- **Login:** `admin` / `prom-operator`
+
+**6. Prometheus UI:**
+
+```bash
+kubectl port-forward svc/prometheus-stack-kube-prom-prometheus 9090:9090 -n beeq
+```
+
+- **URL:** `http://localhost:9090`
+
 ## 📄 API Documentation
 
 The OpenAPI documentation is automatically generated and available at the API root, on the `/api` endpoint.
