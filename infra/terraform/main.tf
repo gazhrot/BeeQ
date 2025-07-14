@@ -40,6 +40,10 @@ resource "helm_release" "postgres" {
     value = "password"
   }
   set {
+    name  = "auth.password"
+    value = "password"
+  }
+  set {
     name  = "auth.username"
     value = "user"
   }
